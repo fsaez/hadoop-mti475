@@ -2,37 +2,40 @@ package air1;
 import java.io.IOException;
 
 import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
-public class AirTimeReducer extends Reducer<Text, IntWritable, Text, FloatWritable> {
-	private IntWritable result = new IntWritable(); 
-	float totalPassenger = 0;
-	public void reduce(Text key, Iterable<IntWritable> values, Context context) throws
+public class AirTimeReducer extends Reducer<Text, FloatWritable, Text, FloatWritable> {
+	private FloatWritable result = new FloatWritable(); 
+	float totalVuelos = 0;
+	float totalAirTime = 0;
+	boolean flag=true;
+	
+	public void reduce(Text key, Iterable<FloatWritable> values, Context context) throws
 	IOException, InterruptedException { 
-		 	int sumVal = 0;
-		 	if(key.find("TotalVuelos")>0) // si TotalVuelos presente 
-		 	{
-		 		for (IntWritable val : values)
-				{
-					sumVal+=val.get();	
-				}
-		 		totVuelos=sumVal; 
-		 		
-		 	//every key is written to disk for varification
-		 	context.write(key, new FloatWritable(sumVal));
-		 	}
-		 	else
-		 	{//passanger count
-		 		for (IntWritable val : values)
-				{
-					sumVal+=val.get();	
-				}
-		 		
-		 	context.write(key, new FloatWritable(sumVal)); // passanger count with key write on disk
-		 	context.write(new Text("Promedio_AirTime"), new FloatWritable(totVuelos/sumVal));
-		 	}				
+		float sumVal = 0;
+		
+		for (FloatWritable val : values)
+		{
+			sumVal+=val.get();	
+		}
+		context.write(key, new FloatWritable(sumVal));
+		
+		if(key.equals(new Text("TotalVuelos")))
+		{		
+			//Total trip distance
+			totalVuelos=sumVal;
+		}
+		if(key.equals(new Text("AirTime")))
+		{
+			//total number of trip
+			totalAirTime=sumVal;
+		}
+		if(flag && totalVuelos>0 && totalAirTime>0)
+		{
+			flag=false;
+			context.write(new Text("AirTime Promedio"), new FloatWritable(totalAirTime/totalVuelos));
+		}					
 	 }
 }

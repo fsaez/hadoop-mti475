@@ -22,13 +22,11 @@ public class TopOriginMapper extends Mapper<Object, Text, Text, IntWritable> {
 			
 			String [] columns=nextLine.split(",");
 			
-			//Cantidad de columnas 29	
-					if(columns.length==29 && columns[0].equals("Year"))
+			//Cantidad de columnas 29 e ignorar primera linea	
+					if(columns.length==29 && !columns[16].equals("Origin"))
 					{
 						// Columna 16 es Origen
 						context.write(new Text(columns[16]), one);
 					}
-
-			
 		}
 }
