@@ -18,7 +18,7 @@ public class TopOriginMapper extends Mapper<Object, Text, Text, IntWritable> {
 	InterruptedException {
 		
 			word.set(value);
-			String nextLine =word.toString();
+			String nextLine =word.toString(); 
 			
 			String [] columns=nextLine.split(",");
 			

@@ -24,12 +24,10 @@ public class AirTimeReducer extends Reducer<Text, FloatWritable, Text, FloatWrit
 		
 		if(key.equals(new Text("TotalVuelos")))
 		{		
-			//Total trip distance
 			totalVuelos=sumVal;
 		}
 		if(key.equals(new Text("AirTime")))
 		{
-			//total number of trip
 			totalAirTime=sumVal;
 		}
 		if(flag && totalVuelos>0 && totalAirTime>0)

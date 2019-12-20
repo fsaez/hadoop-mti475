@@ -8,8 +8,7 @@ public class AirTimeCombiner extends Reducer<Text, FloatWritable, Text, FloatWri
 	private FloatWritable result = new FloatWritable();
 	public void reduce(Text key, Iterable<FloatWritable> values, Context context) throws
 	IOException, InterruptedException {
-		// combiner for each class is almost same only output value may be change as per requirement
-		int sum = 0;
+		float sum = 0;
 		for (FloatWritable val : values) {
 			sum += val.get();
 		}

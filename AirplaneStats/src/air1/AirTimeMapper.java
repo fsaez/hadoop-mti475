@@ -19,14 +19,9 @@ public class AirTimeMapper extends Mapper<Object, Text, Text, FloatWritable> {
 		String nextLine =word.toString();
 		String [] columns=nextLine.split(",");
 
-		// 29 columnas e ignorar primera linea
-		try {
-			float test = Float.parseFloat(columns[13]);
-		} catch (NumberFormatException e) {
-			flag=false;
-		}
-		
-		if(columns.length==29 && !columns[13].equals("AirTime") && flag)
+		// 29 columnas e ignorar primera linea. Columna 13 es AirTime
+
+		if(columns.length==29 && !columns[13].equals("AirTime") && flag && !columns[13].equals("NA"))
 		{
 			// Sumando vuelos
 			context.write(new Text("TotalVuelos"), new FloatWritable(1));
